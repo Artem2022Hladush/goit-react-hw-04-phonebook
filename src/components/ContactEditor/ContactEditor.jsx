@@ -1,35 +1,40 @@
-import  React, {Component} from "react";
+import  {useState} from "react";
 import PropTypes from "prop-types"
 import css from "../ContactEditor/ContactEditor.module.css"
 
-class ContactEditor extends Component {
-	static propTypes={
-		onSubmit:PropTypes.func.isRequired
+export function ContactEditor({onSubmit}) {
+
+const [name, setName] = useState("");
+const [number, setNumber] = useState("");
+
+const handleChange = e => {
+
+	switch(e.target.name) {
+		case 'name':
+			setName(e.target.value);
+			break;
+
+			case 'number':
+				setNumber(e.target.value);
+				break;
+
+				default:
+					return;
+	}
 }
 
-state = {
-	name: "",
-	number: ""
-};
-
-
-
-handleChange = e => {
-const {name, value} = e.currentTarget;
-this.setState({[name]: value})
-}
-
-handleSubmit = e => {
+const handleSubmit = e => {
 	e.preventDefault();
 
-	this.props.onSubmit(this.state)
+	onSubmit({name, number})
+setName('');
+setNumber('');
 
-	this.setState({name: "", number: ""})
 }
 
-render() {
+
 	return (
-		<form className={css.form} onSubmit={this.handleSubmit}>
+		<form className={css.form} onSubmit={handleSubmit}>
 			<div>
 			<label className={css.label} htmlFor="name">Name</label >
 			<input
@@ -39,8 +44,8 @@ render() {
 				pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
 				title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
 				required
-				onChange={this.handleChange}
-				value={this.state.name}
+				onChange={handleChange}
+				value={name}
 				id="name"
 />
 			</div>
@@ -54,14 +59,15 @@ render() {
 				title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
 				required
 				id="number"
-				onChange={this.handleChange}
-				value={this.state.number}
+				onChange={handleChange}
+				value={number}
 			/>
 			</div>
 <button className={css.form__button} type="submit">Add Contact</button>
 		</form>
 	)
-}
 };
 
-export default ContactEditor;
+ContactEditor.propTypes ={
+	onSubmit: PropTypes.func.isRequired,
+}

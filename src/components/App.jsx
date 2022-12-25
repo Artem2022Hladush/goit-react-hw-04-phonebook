@@ -1,76 +1,58 @@
-import  React, {Component} from "react";
+import  {useState, useEffect} from "react";
 import ContactList from "./ContactList/ContactList";
-import ContactEditor from "./ContactEditor/ContactEditor";
+import {ContactEditor} from "./ContactEditor/ContactEditor";
 import Filter from "./Filter/Filter";
 import {nanoid} from "nanoid"
+import Notiflix from 'notiflix';
 
 
-class App extends Component {
-state = {
-  contacts: [],
+export function App() {
+  const [contacts, setContacts] = useState(JSON.parse(window.localStorage.getItem('contacts' )) ?? []);
+  const [filter, setFilter] = useState("")
 
-  filter: "",
+  useEffect(()=> {
+    window.localStorage.setItem('contact', JSON.stringify(contacts))
+  }, [contacts])
+
+
+  const addContact = ({ name, number }) => {
+    const isAdded = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (isAdded) {
+      Notiflix.Notify.warning(`${name} is already in contacts`);
+      return 1;
+    }
+    const contact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    setContacts(prevState => [contact, ...prevState]);
+  };
+
+
+const handleDeleteContact = id => {
+  setContacts(prevState => prevState.filter(contact => contact.id !== id));
 };
 
-addContact = ({name, number}) => {
-  
-
-  const contact = {
-    id: nanoid(),
-    name,
-    number
-  }
-
-  this.setState(pervState => ({
-    contacts: [contact, ...pervState.contacts],
-  }))
-}
-
-
-handleDeleteContact = (contactId) => {
-this.setState(prevState => ({
-  contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-}))
+const changeFilter = e => {
+setFilter(e.target.value)
 };
 
-changeFilter = e => {
-  this.setState({filter: e.currentTarget.value})
-};
-
-getFilterContact =()=> {
-const {filter, contacts} = this.state;
-
+const getFilterContact =()=> {
   const normalizedFilter = filter.toLowerCase();
   return contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
 }
 
-componentDidMount() {
-  const contact = localStorage.getItem('contact');
-  const parsedContact = JSON.parse(contact);
-  if(parsedContact) {
-    this.setState({contacts: parsedContact});
-  }
-}
-
-componentDidUpdate(prevProps, prevState) {
-  if(this.state.contacts !== prevState.contacts) {
-    localStorage.setItem('contact', JSON.stringify(this.state.contacts))
-  }
-}
-
-render() {
-const { filter} =this.state;
-
   return (
     <div className="container">
       <h1 className="title">Phonebook</h1>
-    <ContactEditor onSubmit={this.addContact}/>
-    <Filter value={filter} onChange={this.changeFilter}/>
+    <ContactEditor onSubmit={addContact}/>
+    <Filter value={filter} onChange={changeFilter}/>
     <h2 className="title">Contacts</h2>
-    <ContactList contacts={this.getFilterContact()} onDeleteContact={this.handleDeleteContact}/>
+    <ContactList contacts={getFilterContact()} onDeleteContact={handleDeleteContact}/>
     </div>
   )
-}
 };
-
-export default App;
