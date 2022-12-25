@@ -1,0 +1,20 @@
+.title__filter{
+	display: block;
+	text-align: center;
+	color: greenyellow;
+	font-size: 35px;
+	margin-bottom: 40px;
+}
+.box{
+margin-top: 50px;
+margin-bottom: 50px;
+}
+.input__filter{
+	display: flex;
+	border: none;
+	background: none;
+	border-bottom:4px solid darkorchid;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto;
+}

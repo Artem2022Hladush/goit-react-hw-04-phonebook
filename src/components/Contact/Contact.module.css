@@ -1,0 +1,34 @@
+.contact{
+	display: flex;
+	width: 600px;
+	justify-content: space-between;
+}
+
+
+
+.contact__button{
+	border: 2px solid navy;
+	width: 65px;
+	height: 25px;
+	background-color: black;
+	color: crimson;
+	border-radius: 5px;
+}
+
+.contact__button:hover,
+.contact__button:active,
+.contact__button:focus{
+	color:darkorange;
+	background-color: darkred;
+	border: 2px solid purple;
+}
+
+.name{
+	font-size: 20px;
+	color: purple;
+	}
+.number{
+	margin-left: 10px;
+	font-size: 20px;
+	color: purple;
+	}

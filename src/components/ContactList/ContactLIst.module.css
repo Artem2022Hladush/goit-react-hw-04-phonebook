@@ -1,0 +1,16 @@
+.contact__list{
+	align-items: center;
+	margin: 0 auto;
+	width: 600px;
+	justify-content: space-between;
+}
+
+.contact__item{
+display: flex;
+justify-content: space-between;
+}
+
+.contact__item:not(:last-child){
+	margin-bottom: 5px;
+}
+
