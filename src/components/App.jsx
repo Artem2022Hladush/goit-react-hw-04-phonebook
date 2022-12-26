@@ -7,11 +7,18 @@ import Notiflix from 'notiflix';
 
 
 export function App() {
-  const [contacts, setContacts] = useState(JSON.parse(window.localStorage.getItem('contacts' )) ?? []);
+  const [contacts, setContacts] = useState(() => {
+    const savedContacts = window.localStorage.getItem('contacts');
+    if(savedContacts !== null){
+     const  parsedContacts = JSON.parse(savedContacts);
+     return parsedContacts; 
+    }
+    return [];
+  });
   const [filter, setFilter] = useState("")
 
   useEffect(()=> {
-    window.localStorage.setItem('contact', JSON.stringify(contacts))
+    window.localStorage.setItem('contacts', JSON.stringify(contacts))
   }, [contacts])
 
 
